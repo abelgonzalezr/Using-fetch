@@ -2,25 +2,32 @@ import React from "react";
 
 //include images into your bundle
 import rigoImage from "../../img/rigo-baby.jpg";
+import { useEffect, useState } from "react";
+import ReactLoading from 'react-loading';
 
+
+const Example = ({ type, color }) => (
+    <ReactLoading type={type} color={color} height={667} width={375} />
+);
 //create your first component
 const Home = () => {
-	return (
-		<div className="text-center">
-			<h1 className="text-center mt-5">Hello Rigo!</h1>
-			<p>
-				<img src={rigoImage} />
-			</p>
-			<a href="#" className="btn btn-success">
-				If you see this green button... bootstrap is working...
-			</a>
-			<p>
-				Made by{" "}
-				<a href="http://www.4geeksacademy.com">4Geeks Academy</a>, with
-				love!
-			</p>
-		</div>
-	);
+  const [image, setImage] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    fetch("https://dog.ceo/api/breeds/image/random")
+      .then((response) => response.json())
+      .then((perro) => {
+        console.log(perro);
+        setImage(perro.message);
+		setIsLoading(false)
+      });
+  }, []);
+
+  if (isLoading) {
+    return <Example type={"balls"} color="black"/>;
+  }
+
+  return <img src={image} alt="imagen perro aleatoria" />;
 };
 
 export default Home;
